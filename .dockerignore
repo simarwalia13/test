@@ -1,0 +1,24 @@
+node_modules
+.dockerignore
+Dockerfile
+docker-compose.yml
+.git
+.gitignore
+*.log
+.next
+
+
+# Node modules are ignored to reduce image size and build time
+# They will be installed fresh during the Docker build process
+
+
+# Docker-related files are not needed inside the container
+
+
+# Git-related files are not needed for the application to run
+
+# Log files are typically not needed in the container
+
+
+# The .next folder contains build output, which will be generated fresh during the Docker build
+
