@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt';
-// import nodemailer from 'nodemailer';
 import { NextApiRequest, NextApiResponse } from 'next';
+import nodemailer from 'nodemailer';
 
 import { connect } from '@/database/dbconfig';
 
+import { GMAIL_PASS, GMAIL_USER } from '@/config';
 import userModel from '@/model/user.model';
-// import { GMAIL_PASS, GMAIL_USER } from '@/config';
 
 connect();
 
@@ -35,24 +35,24 @@ const createUser = async (req: NextApiRequest, res: NextApiResponse) => {
       firstName,
       lastName,
     });
-    // const transporter = nodemailer.createTransport({
-    //   service: 'Gmail',
-    //   auth: {
-    //     user: GMAIL_USER,
-    //     pass: GMAIL_PASS,
-    //   },
-    //   tls: {
-    //     rejectUnauthorized: false,
-    //   },
-    // });
-    // const mailOptions = {
-    //   from: GMAIL_USER,
-    //   to: newUser.email,
-    //   subject: 'Welcome to Our Platform!',
-    //   text: 'Thank you for signing up. We are excited to have you on board!',
-    // };
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: GMAIL_USER,
+        pass: GMAIL_PASS,
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+    const mailOptions = {
+      from: GMAIL_USER,
+      to: newUser.email,
+      subject: 'Welcome to Our Platform!',
+      text: 'Thank you for signing up. We are excited to have you on board!',
+    };
 
-    // await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
     res
       .status(201)
       .json({ message: 'user created succussfully', data: newUser });

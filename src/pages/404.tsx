@@ -1,5 +1,5 @@
-import React from 'react';
 import ArrowLink from '@/components/links/ArrowLink';
+import React from 'react';
 import { RiAlarmWarningFill } from 'react-icons/ri';
 
 const NotFoundPage: React.FC = () => {

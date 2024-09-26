@@ -1,10 +1,11 @@
+import React from 'react';
 import { ConfigProvider } from 'antd';
 import { AppProps } from 'next/app';
 import { IconContext } from 'react-icons';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-import '@/styles/globals.css';
 import '@/styles/colors.css';
+import '@/styles/globals.css';
 
 const queryClient = new QueryClient();
 

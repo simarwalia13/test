@@ -6,7 +6,7 @@ const config: Config = {
   theme: {
     screens: {
       // Portrait
-      xxxs: '290px',
+      xxxs: '100px',
       xxs: '375px',
       xs: '480px',
       sm: '640px',

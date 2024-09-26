@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { message as antdMessage } from 'antd';
 import { useFormik } from 'formik';
 import React from 'react';
@@ -5,14 +6,15 @@ import * as Yup from 'yup';
 
 import { useLogin } from '@/hooks/user/mutation';
 
-import Form from '@/components/layout/form';
+import FormLayout from '@/components/layout/layouts';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export default function Login() {
-  const [isloading, setIsLoading] = React.useState(false);
   const [isMounted, setIsMounted] = React.useState(false);
+  const router = useRouter();
 
   React.useEffect(() => {
     setIsMounted(true);
@@ -23,12 +25,12 @@ export default function Login() {
   const passwordRegex: any =
     /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d)[A-Za-z\d!@#$%^&*]{6,}$/;
 
-  const validationSchema = Yup.object({
+  const validation = Yup.object({
     email: Yup.string()
       .matches(emailRegex, 'Invalid email address')
       .required('email is required'),
     password: Yup.string()
-      .min(6, 'Password must be at least 5 characters')
+      .min(6, 'Password must be at least 6 characters')
       .required('Password is required')
       .matches(
         passwordRegex,
@@ -40,10 +42,9 @@ export default function Login() {
       email: '',
       password: '',
     },
-    validationSchema,
+    validationSchema: validation,
     onSubmit: async (values) => {
       try {
-        setIsLoading(true);
         userLogin
           ?.mutateAsync({
             body: values,
@@ -51,13 +52,13 @@ export default function Login() {
           .then(async (res: any) => {
             if (res?.token) {
               localStorage.setItem('authorization', res?.token);
+              router.push('/');
             }
-            setIsLoading(false);
+
             antdMessage.success('Login successfully');
           })
           .catch((err: any) => {
-            setIsLoading(false);
-            antdMessage.error(' User Already Exists', err);
+            antdMessage.error(err.response?.data?.message);
           });
       } catch (error: any) {
         throw new Error(error);
@@ -69,25 +70,21 @@ export default function Login() {
   }
 
   return (
-    <Form>
+    <FormLayout>
       <main className='flex justify-center items-center h-screen'>
-        <div className=' flex justify-center rounded-xl border border-red-500 w-fit  bg-black bg-opacity-5 py-3 backdrop-blur-sm px-2'>
-          <form
-            className='mx-2 p-2 space-x-3 '
-            onSubmit={formik.handleSubmit}
-            action='#'
-            method='POST'
-          >
+        <div className=' flex justify-center rounded-xl  w-fit  bg-black bg-opacity-10 py-3 backdrop-blur-sm px-5'>
+          <form className='mx-2 p-2 space-x-3 ' method='POST'>
             <div className='-space-y-px rounded-md shadow-sm'>
               <div>
                 <h1 className='p-2 text-2xl font-semibold'>LOGIN</h1>
               </div>
               <div className='xxxs:gap-4 flex flex-col gap-4'>
                 <div className=''>
-                  <label className='xxxs:text-[15px] '>
+                  <label htmlFor='email' className='xxxs:text-[15px] '>
                     Email
                     <div className=''>
                       <input
+                        id='email'
                         name='email'
                         type='email'
                         value={formik.values.email}
@@ -105,10 +102,11 @@ export default function Login() {
                   </label>
                 </div>
                 <div>
-                  <label className='xxxs:text-[15px]'>
+                  <label htmlFor='password' className='xxxs:text-[15px]'>
                     Password
                     <div className=''>
                       <input
+                        id='password'
                         name='password'
                         value={formik.values.password}
                         onChange={formik.handleChange}
@@ -132,11 +130,14 @@ export default function Login() {
                 </div>
                 <div className='mt-3 '>
                   <button
-                    type='submit'
-                    disabled={isloading}
+                    type='button'
+                    onClick={() => {
+                      formik.handleSubmit();
+                    }}
+                    disabled={userLogin.isLoading}
                     className='xxs:w-full xxxs:w-[95%] group relative flex w-[90%] justify-center rounded-md border border-transparent bg-black px-5 py-2 text-xl font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
                   >
-                    {isloading ? (
+                    {userLogin.isLoading ? (
                       <Spin indicator={<LoadingOutlined spin />} />
                     ) : (
                       'Login'
@@ -148,6 +149,6 @@ export default function Login() {
           </form>
         </div>
       </main>
-    </Form>
+    </FormLayout>
   );
 }

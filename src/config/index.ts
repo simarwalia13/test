@@ -8,7 +8,7 @@ export const {
   NEXTAUTH_SECRET,
   DB_NAME,
   EXPIRE_DAY,
-  HOST_URI,
+
   JWT_SECRET,
   GMAIL_USER,
   GMAIL_PASS,

@@ -1,13 +1,26 @@
-import React from 'react';
 import Link from 'next/link';
+import React from 'react';
+import Lottie from 'react-lottie';
+import windmillAnimationData from '../../public/json/windmill.json';
 
 const Home: React.FC = () => {
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: windmillAnimationData,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice',
+    },
+  };
+
   return (
-    <div className='min-h-screen bg-gray-100 flex flex-col items-center justify-center'>
+    <div className='min-h-screen flex flex-col bg-gray-100'>
       <header className='w-full bg-white shadow'>
-        <div className='container mx-auto px-6 py-3 flex justify-between items-center'>
-          <h1 className='text-3xl font-bold text-gray-800'>testcase Website</h1>
-          <div>
+        <div className='mx-auto px-6 py-3 flex justify-between items-center'>
+          <h1 className='sm:text-3xl xxxs:text-sm font-bold opacity-50 text-gray-800'>
+            Testcase website
+          </h1>
+          <div className='flex justify-between items-center'>
             <Link href='/auth/login'>
               <div className='text-gray-800 hover:text-gray-600 mx-4'>
                 Login
@@ -21,9 +34,16 @@ const Home: React.FC = () => {
           </div>
         </div>
       </header>
-
-      <footer className='w-full bg-white shadow py-4'>
-        <div className='container mx-auto px-6 text-center text-gray-600'>
+      <div className='flex-grow text-center text-gray-600 '>
+        <div className='md:text-8xl xxxs:text-4xl mt-7 mb-4 opacity-30'>
+          This is test case
+        </div>
+        <div className='w-full max-w-md mx-auto'>
+          <Lottie options={defaultOptions} />
+        </div>
+      </div>
+      <footer className='w-full bg-white shadow py-4 '>
+        <div className='mx-auto px-6 text-center text-gray-600'>
           &copy; 2023 testcase Website. All rights reserved.
         </div>
       </footer>
